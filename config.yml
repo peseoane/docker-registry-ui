@@ -20,7 +20,7 @@ registry_password: mestre
 
 # Event listener token.
 # The same one should be configured on Docker registry as Authorization Bearer token.
-event_listener_token: token
+event_listener_token: abcdefghijklmnopqrstuvwxyz1234567890
 # Retention of records to keep.
 event_retention_days: 7
 
@@ -44,7 +44,7 @@ anyone_can_view_events: true
 anyone_can_delete: false
 # Users allowed to delete tags.
 # This should be sent via X-WEBAUTH-USER header from your proxy.
-admins: []
+admins: [mestre]
 
 # Debug mode. Affects only templates.
 debug: true

@@ -1,33 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Docker Registry UI</title>
-        <link rel="stylesheet" type="text/css" href="{{ basePath }}/static/datatables.min.css"/>
-        <script type="text/javascript" src="{{ basePath }}/static/datatables.min.js"></script>
-        {{yield head()}}
-    </head>
-    <body>
-        <div class="container">
-            <div style="float: left">
-                <h2><a href="{{ basePath }}/" style="text-decoration: none">Docker Registry UI</a></h2>
-            </div>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rexistro Docker IES de Teis</title>
+    <link rel="stylesheet" href="{{ basePath }}/static/css/bootstrap.min.css">
+    {{yield head()}}
+
+    <style>
+
+
+        @font-face {
+            font-family: 'IBMPlexSans-Bold';
+            src: url('static/fonts/IBMPlexSans-Bold.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-BoldItalic';
+            src: url("static/fonts/IBMPlexSans-BoldItalic.woff2") format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-ExtraLight';
+            src: url('static/fonts/IBMPlexSans-ExtraLight.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-ExtraLightItalic';
+            src: url('static/fonts/IBMPlexSans-ExtraLightItalic.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-Italic';
+            src: url('static/fonts/IBMPlexSans-Italic.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-Light';
+            src: url('static/fonts/IBMPlexSans-Light.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-LightItalic';
+            src: url('static/fonts/IBMPlexSans-LightItalic.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-Medium';
+            src: url('static/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-MediumItalic';
+            src: url('static/fonts/IBMPlexSans-MediumItalic.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-Regular';
+            src: url('static/fonts/IBMPlexSans-Regular.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-SemiBold';
+            src: url('static/fonts/IBMPlexSans-SemiBold.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-SemiBoldItalic';
+            src: url('static/fonts/IBMPlexSans-SemiBoldItalic.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-Text';
+            src: url('static/fonts/IBMPlexSans-Text.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-TextItalic';
+            src: url('static/fonts/IBMPlexSans-TextItalic.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-Thin';
+            src: url('static/fonts/IBMPlexSans-Thin.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'IBMPlexSans-ThinItalic';
+            src: url('static/fonts/IBMPlexSans-ThinItalic.woff2') format('woff2');
+        }
+
+        /* Aplicar la fuente predeterminada */
+        .font-face {
+            font-family: 'IBMPlexSans-Regular';
+        }
+
+        .font-face-bold {
+            font-family: 'IBMPlexSans-Bold';
+        }
+
+        .font-face-bold-italic {
+            font-family: 'IBMPlexSans-BoldItalic';
+        }
+
+        .font-face-extra-light {
+            font-family: 'IBMPlexSans-ExtraLight';
+        }
+
+        .font-face-extra-light-italic {
+            font-family: 'IBMPlexSans-ExtraLightItalic';
+        }
+
+        .font-face-italic {
+            font-family: 'IBMPlexSans-Italic';
+        }
+
+        .font-face-light {
+            font-family: 'IBMPlexSans-Light';
+        }
+
+        .font-face-light-italic {
+            font-family: 'IBMPlexSans-LightItalic';
+        }
+
+        .font-face-medium {
+            font-family: 'IBMPlexSans-Medium';
+        }
+
+        .font-face-medium-italic {
+            font-family: 'IBMPlexSans-MediumItalic';
+        }
+
+        .font-face-regular {
+            font-family: 'IBMPlexSans-Regular';
+        }
+
+        .font-face-semi-bold {
+            font-family: 'IBMPlexSans-SemiBold';
+        }
+
+        .font-face-semi-bold-italic {
+            font-family: 'IBMPlexSans-SemiBoldItalic';
+        }
+
+        .font-face-text {
+            font-family: 'IBMPlexSans-Text';
+        }
+
+        .font-face-text-italic {
+            font-family: 'IBMPlexSans-TextItalic';
+        }
+
+        .font-face-thin {
+            font-family: 'IBMPlexSans-Thin';
+        }
+
+        .font-face-thin-italic {
+            font-family: 'IBMPlexSans-ThinItalic';
+        }
+
+        body {
+            font-family: 'IBMPlexSans-Regular';
+        }
+
+        .font-face {
+            font-family: 'IBMPlexSans-Regular';
+        }
+
+
+        body {
+            background-color: #343a40; /* Color de fondo para modo oscuro */
+            color: white; /* Color del texto para modo oscuro */
+        }
+
+        .navbar {
+            background-color: #343a40 !important; /* Fondo de la barra de navegación para modo oscuro */
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important; /* Color de los enlaces en modo oscuro */
+        }
+
+        .footer {
+            background-color: #343a40; /* Fondo del pie de página para modo oscuro */
+            color: white; /* Color del texto en el pie de página para modo oscuro */
+        }
+
+    </style>
+
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark fixed-top link-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="{{ basePath }}/static/LOGO.svg" alt="favicon" height="30" class="d-inline-block align-top">
+            IES DE TEIS
+        </a>
+        <span class="fw-light text-white">Repositorio Docker Offline</span>
+        <div class="navbar-nav ms-auto flex-row">
+            <button class="btn btn-link text-white" onclick="window.location.href='{{ basePath }}/logs'">Ver logs</button>
             {{if eventsAllowed}}
-            <div style="float: right">
-                <h4><a href="{{ basePath }}/events">Event Log</a></h4>
-            </div>
+            <button class="btn btn-link text-white" onclick="window.location.href='{{ basePath }}/events'">Event Log</button>
             {{end}}
-            <div style="clear: both"></div>
-
-            {{yield body()}}
-
-            <div style="padding: 10px 0; margin-bottom: 20px">
-                <div style="text-align: center; color:darkgrey">
-                    Docker Registry UI v{{version}} &copy; by <a href="https://quiq.com">Quiq Inc.</a>
-                </div>
-            </div>
         </div>
-    </body>
+    </div>
+</nav>
+
+<div class="container-fluid pt-5 mt-4 text-white link-light table-dark" >
+    {{yield body()}}
+</div>
+
+<footer class="footer py-3 bg-dark text-white fixed-bottom">
+    <div class="container text-center">
+        <img src="{{ basePath }}/static/LOGO.svg" alt="favicon" class="mb-3" style="width: 5em;">
+        <p class="mb-0 fw-bold">IES de Teis</p>
+        <p class="mb-0 text-light text-white">Repositorio Docker Offline.</p>
+    </div>
+</footer>
+
+<script src="{{ basePath }}/static/js/bootstrap.min.js"></script>
+</body>
 </html>

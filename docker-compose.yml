@@ -5,19 +5,21 @@ services:
   daw-docker-registry:
     container_name: daw-docker-registry
     image: registry:2.8.2
-    restart: unless-stopped
+    restart: always
     environment:
       REGISTRY_STORAGE_DELETE_ENABLED: "true"
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
       REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+      TZ : Europe/Madrid
     ports:
       - "5000:5000"
     volumes:
       - daw-docker-registry-data:/var/lib/registry
       - ./auth:/auth
       - ./data:/data
+      - ./configRegistry.yml:/etc/docker/registry/config.yml
     networks:
       - wan-daw-docker-registry-network
 
@@ -26,15 +28,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
+    restart: always
     ports:
-      - "8080:8000"
+      - "5001:8000"
     links:
       - daw-docker-registry
     depends_on:
       - daw-docker-registry
     volumes:
       - ./config.yml:/opt/config.yml:ro
+      - ./registry_events.db:/data/registry_events.db
+    environment:
+      TZ : Europe/Madrid
+
 
     networks:
       - wan-daw-docker-registry-network

@@ -1,18 +1,34 @@
 {{extends "base.html"}}
 
 {{block head()}}
+<style>
+    body {
+        background-color: #343a40; /* Color de fondo para modo oscuro */
+        color: white; /* Color del texto para modo oscuro */
+    }
+
+    .navbar {
+        background-color: #343a40 !important; /* Fondo de la barra de navegación para modo oscuro */
+    }
+
+    .navbar-nav .nav-link {
+        color: white !important; /* Color de los enlaces en modo oscuro */
+    }
+
+    .footer {
+        background-color: #343a40; /* Fondo del pie de página para modo oscuro */
+        color: white; /* Color del texto en el pie de página para modo oscuro */
+    }
+
+
+</style>
 <script type="text/javascript">
     $(document).ready(function() {
         $('#namespace').on('change', function (e) {
             window.location = '{{ basePath }}/' + this.value;
         });
-        namespace = window.location.pathname;
-        namespace = namespace.replace("{{ basePath }}", "");
-        if (namespace == '/') {
-            namespace = 'library';
-        } else {
-            namespace = namespace.split('/')[1]
-        }
+
+        let namespace = window.location.pathname.replace("{{ basePath }}", "") || 'library';
         $('#namespace').val(namespace);
 
         $('#datatable').DataTable({
@@ -27,42 +43,42 @@
 {{end}}
 
 {{block body()}}
-<div style="float: right">
-    <select id="namespace" class="form-control input-sm" style="height: 36px">
+<div class="d-flex justify-content-end mb-3 table-dark text-white bg-dark">
+    <select id="namespace" class="form-select">
         {{range namespace := namespaces}}
         <option value="{{ namespace }}">{{ namespace }}</option>
         {{end}}
     </select>
 </div>
-<div style="float: right">
+<div class="d-flex justify-content-end mb-3">
     <ol class="breadcrumb">
-        <li class="active">Namespace</li>
+        <li class="breadcrumb-item active">Namespace</li>
     </ol>
 </div>
 
 <ol class="breadcrumb">
-    <li><a href="{{ basePath }}/">{{ registryHost }}</a></li>
+    <li class="breadcrumb-item"><a class="link-light text-white" href="{{ basePath }}/">{{ registryHost }}</a></li>
     {{if namespace != "library"}}
-    <li><a href="{{ basePath }}/{{ namespace }}">{{ namespace }}</a></li>
+    <li class="breadcrumb-item"><a class="link-light text-white" href="{{ basePath }}/{{ namespace }}">{{ namespace }}</a></li>
     {{end}}
 </ol>
 
-<table id="datatable" class="table table-striped table-bordered">
-    <thead bgcolor="#ddd">
-        <tr>
-            <th>Repository</th>
-            <th width="20%">Tags</th>
-        </tr>
+<table id="datatable" class="table table-striped table-bordered table-dark text-white link-light table-dark">
+    <thead class="bg-dark">
+    <tr>
+        <th>Repository</th>
+        <th width="20%">Tags</th>
+    </tr>
     </thead>
     <tbody>
-        {{range repo := repos}}
-            {{if !isset(tagCounts[namespace+"/"+repo]) || (isset(tagCounts[namespace+"/"+repo]) && tagCounts[namespace+"/"+repo] > 0)}}
-            <tr>
-                <td><a href="{{ basePath }}/{{ namespace }}/{{ repo|url }}">{{ repo }}</a></td>
-                <td>{{ tagCounts[namespace+"/"+repo] }}</td>
-            </tr>
-            {{end}}
-        {{end}}
+    {{range repo := repos}}
+    {{if !isset(tagCounts[namespace+"/"+repo]) || (isset(tagCounts[namespace+"/"+repo]) && tagCounts[namespace+"/"+repo] > 0)}}
+    <tr>
+        <td><a class="link-light text-white" href="{{ basePath }}/{{ namespace }}/{{ repo|url }}">{{ repo }}</a></td>
+        <td>{{ tagCounts[namespace+"/"+repo] }}</td>
+    </tr>
+    {{end}}
+    {{end}}
     </tbody>
 </table>
 {{end}}

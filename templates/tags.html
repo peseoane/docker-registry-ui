@@ -1,92 +1,150 @@
 {{extends "base.html"}}
 
 {{block head()}}
-<script type="text/javascript" src="{{ basePath }}/static/bootstrap-confirmation.min.js"></script>
+<script type="text/javascript" src="{{ basePath }}/static/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="{{ basePath }}/static/sorting_natural.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#datatable').DataTable({
+    document.addEventListener('DOMContentLoaded', function() {
+        var table = new bootstrap.DataTable(document.getElementById('datatable'), {
             "pageLength": 10,
-            "order": [[ 0, 'desc' ]],
+            "order": [[0, 'desc']],
             "stateSave": true,
             columnDefs: [
-              { type: 'natural', targets: 0 }
+                { type: 'natural', targets: 0 }
             ],
             "language": {
-                "emptyTable": "No tags in this repository."
+                "emptyTable": "Non hai etiquetas neste repositorio."
             }
-        })
-        function populateConfirmation()  {
-            $('[data-toggle=confirmation]').confirmation({
-                rootSelector: '[data-toggle=confirmation]',
-                container: 'body'
+        });
+
+        function populateConfirmation() {
+            var confirmElements = document.querySelectorAll('[data-toggle=confirmation]');
+            confirmElements.forEach(function(element) {
+                new bootstrap.Popover(element, {
+                    container: 'body',
+                    trigger: 'focus',
+                    html: true,
+                    content: '<button class="btn btn-danger btn-sm" data-toggle="confirmation" data-popout="true" data-singleton="true" data-title="Eliminar etiqueta?" data-content="¿Estás seguro de que quieres eliminar esta etiqueta?" data-placement="top">Sí, eliminar</button>'
+                });
             });
         }
-        populateConfirmation()
-        $('#datatable').on('draw.dt', populateConfirmation)
 
-
+        populateConfirmation();
+        table.on('draw.dt', populateConfirmation);
     });
 </script>
 {{end}}
 
 {{block body()}}
-<ol class="breadcrumb">
-    <li><a href="{{ basePath }}/">{{ registryHost }}</a></li>
-    {{if namespace != "library"}}
-    <li><a href="{{ basePath }}/{{ namespace }}">{{ namespace }}</a></li>
-    {{end}}
-    <li class="active">{{ repo|url_decode }}</li>
-</ol>
+<!DOCTYPE html>
+<html lang="en">
 
-<table id="datatable" class="table table-striped table-bordered">
-    <thead bgcolor="#ddd">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rexistro Docker IES de Teis</title>
+    <link rel="stylesheet" href="{{ basePath }}/static/css/bootstrap.min.css">
+    {{yield head()}}
+</head>
+
+<style>
+
+    body {
+        background-color: #343a40; /* Color de fondo para modo oscuro */
+        color: white; /* Color del texto para modo oscuro */
+    }
+
+    .navbar {
+        background-color: #343a40 !important; /* Fondo de la barra de navegación para modo oscuro */
+    }
+
+    .navbar-nav .nav-link {
+        color: white !important; /* Color de los enlaces en modo oscuro */
+    }
+
+    .footer {
+        background-color: #343a40; /* Fondo del pie de página para modo oscuro */
+        color: white; /* Color del texto en el pie de página para modo oscuro */
+    }
+</style>
+
+<body>
+
+
+<div class="container mt-4 text-white link-light table-dark">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="link-light text-white" href="{{ basePath }}/">{{ registryHost }}</a></li>
+            {{if namespace != "library"}}
+            <li class="breadcrumb-item"><a class="link-light text-white" href="{{ basePath }}/{{ namespace }}">{{ namespace }}</a></li>
+            {{end}}
+            <li class="breadcrumb-item active">{{ repo|url_decode }}</li>
+        </ol>
+    </nav>
+
+    <table id="datatable" class="table table-striped table-bordered table-dark text-white link-white">
+        <thead class="table-dark">
         <tr>
-            <th>Tag Name</th>
+            <th>Nome da Etiqueta</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {{range tag := tags}}
         <tr>
             <td>
-                <a href="{{ basePath }}/{{ namespace }}/{{ repo }}/{{ tag }}">{{ tag }}</a>
+                <a class="link-light text-white" href="{{ basePath }}/{{ namespace }}/{{ repo }}/{{ tag }}">{{ tag }}</a>
                 {{if deleteAllowed}}
-                <a href="{{ basePath }}/{{ namespace }}/{{ repo }}/{{ tag }}/delete" data-toggle="confirmation" class="btn btn-danger btn-xs pull-right" role="button">Delete</a>
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="confirmation" data-popout="true" data-singleton="true" data-title="Eliminar etiqueta?" data-content="¿Estás seguro de que quieres eliminar esta etiqueta?" data-placement="top">Eliminar</button>
                 {{end}}
             </td>
         </tr>
         {{end}}
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-{{if eventsAllowed}}
-<h4>Latest events on this repo</h4>
-<table id="datatable_log" class="table table-striped table-bordered">
-    <thead bgcolor="#ddd">
+    {{if eventsAllowed}}
+    <h4>Últimos eventos neste repo</h4>
+    <table id="datatable_log" class="table table-striped table-bordered">
+        <thead class="table-dark">
         <tr>
-            <th>Action</th>
-            <th>Image</th>
-            <th>IP Address</th>
-            <th>User</th>
-            <th>Time</th>
+            <th>Acción</th>
+            <th>Imaxe</th>
+            <th>Enderezo IP</th>
+            <th>Usuario</th>
+            <th>Tempo</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {{range e := events}}
-            <tr>
-                <td>{{ e.Action }}</td>
-                {{if hasPrefix(e.Tag,"sha256") }}
-                <td title="{{ e.Tag }}">{{ e.Repository }}@{{ e.Tag[:19] }}...</td>
-                {{else}}
-                <td>{{ e.Repository }}:{{ e.Tag }}</td>
-                {{end}}
-                <td>{{ e.IP }}</td>
-                <td>{{ e.User }}</td>
-                <td>{{ e.Created|pretty_time }}</td>
-            </tr>
+        <tr>
+            <td>{{ e.Action }}</td>
+            {{if hasPrefix(e.Tag,"sha256") }}
+            <td title="{{ e.Tag }}">{{ e.Repository }}@{{ e.Tag[:19] }}...</td>
+            {{else}}
+            <td>{{ e.Repository }}:{{ e.Tag }}</td>
+            {{end}}
+            <td>{{ e.IP }}</td>
+            <td>{{ e.User }}</td>
+            <td>{{ e.Created|pretty_time }}</td>
+        </tr>
         {{end}}
-    </tbody>
-</table>
-{{end}}
+        </tbody>
+    </table>
+    {{end}}
 
+</div>
+
+<footer class="footer py-3 bg-dark text-white fixed-bottom">
+    <div class="container text-center">
+        <img src="{{ basePath }}/static/LOGO.svg" alt="favicon" class="mb-3" style="width: 5em;">
+        <p class="mb-0 fw-bold">IES de Teis</p>
+        <p class="mb-0 text-light text-white">Repositorio Docker Offline.</p>
+    </div>
+</footer>
+
+<script src="{{ basePath }}/static/js/bootstrap.min.js"></script>
+</body>
+
+</html>
 {{end}}

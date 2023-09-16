@@ -129,7 +129,7 @@ func (a *apiClient) viewTagInfo(c echo.Context) error {
 			r["size"] = dSize
 			// Create link here because there is a bug with jet template when referencing a value by map key in the "if" condition under "range".
 			if r["mediaType"] == "application/vnd.docker.distribution.manifest.v2+json" {
-				r["digest"] = fmt.Sprintf(`<a href="%s/%s/%s/%s">%s</a>`, a.config.BasePath, namespace, repo, r["digest"], r["digest"])
+				r["digest"] = fmt.Sprintf(`<a class="link-light text-white" href="%s/%s/%s/%s">%s</a>`, a.config.BasePath, namespace, repo, r["digest"], r["digest"])
 			}
 		} else {
 			// Sub-image of the cache type.

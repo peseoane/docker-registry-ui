@@ -2,8 +2,8 @@
 
 {{block head()}}
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#datatable').DataTable({
+    document.addEventListener('DOMContentLoaded', function() {
+        var table = new bootstrap.DataTable(document.getElementById('datatable'), {
             "pageLength": 10,
             "order": [[ 4, 'desc' ]],
             "stateSave": true,
@@ -15,14 +15,40 @@
 </script>
 {{end}}
 
-{{block body()}}
-<ol class="breadcrumb">
-    <li class="active">Event Log</li>
-</ol>
+<style>
 
-{{if eventsAllowed}}
-<table id="datatable" class="table table-striped table-bordered">
-    <thead bgcolor="#ddd">
+
+    body {
+        background-color: #343a40; /* Color de fondo para modo oscuro */
+        color: white; /* Color del texto para modo oscuro */
+    }
+
+    .navbar {
+        background-color: #343a40 !important; /* Fondo de la barra de navegación para modo oscuro */
+    }
+
+    .navbar-nav .nav-link {
+        color: white !important; /* Color de los enlaces en modo oscuro */
+    }
+
+    .footer {
+        background-color: #343a40; /* Fondo del pie de página para modo oscuro */
+        color: white; /* Color del texto en el pie de página para modo oscuro */
+    }
+</style>
+
+{{block body()}}
+<div class="container-fluid text-white bg-dark table-dark text-white">
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Event Log</li>
+        </ol>
+    </nav>
+
+    {{if eventsAllowed}}
+    <table id="datatable" class="table table-striped table-bordered table-dark text-white">
+        <thead>
         <tr>
             <th>Action</th>
             <th>Image</th>
@@ -30,26 +56,27 @@
             <th>User</th>
             <th>Time</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {{range e := events}}
-            <tr>
-                <td>{{ e.Action }}</td>
-                {{if hasPrefix(e.Tag,"sha256") }}
-                <td title="{{ e.Tag }}">{{ e.Repository }}@{{ e.Tag[:19] }}...</td>
-                {{else}}
-                <td>{{ e.Repository }}:{{ e.Tag }}</td>
-                {{end}}
-                <td>{{ e.IP }}</td>
-                <td>{{ e.User }}</td>
-                <td>{{ e.Created|pretty_time }}</td>
-            </tr>
+        <tr>
+            <td>{{ e.Action }}</td>
+            {{if hasPrefix(e.Tag,"sha256") }}
+            <td title="{{ e.Tag }}">{{ e.Repository }}@{{ e.Tag[:19] }}...</td>
+            {{else}}
+            <td>{{ e.Repository }}:{{ e.Tag }}</td>
+            {{end}}
+            <td>{{ e.IP }}</td>
+            <td>{{ e.User }}</td>
+            <td>{{ e.Created|pretty_time }}</td>
+        </tr>
         {{end}}
-    </tbody>
-</table>
-{{else}}
-<div class="text-center">
-    <h4>User "{{user}}" is not permitted to view the Event Log.</h4>
-</div>
-{{end}}
+        </tbody>
+    </table>
+    {{else}}
+    <div class="text-center table-dark text-white">
+        <h4 class="mt-4">User "{{user}}" is not permitted to view the Event Log.</h4>
+    </div>
+    {{end}}
+</div></div>
 {{end}}
