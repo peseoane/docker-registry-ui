@@ -1,0 +1,50 @@
+version: '3'
+services:
+
+
+  daw-docker-registry:
+    container_name: daw-docker-registry
+    image: registry:2.8.2
+    restart: unless-stopped
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    ports:
+      - "5000:5000"
+    volumes:
+      - daw-docker-registry-data:/var/lib/registry
+      - ./auth:/auth
+      - ./data:/data
+    networks:
+      - wan-daw-docker-registry-network
+
+  daw-docker-registry-ui:
+    container_name: daw-docker-registry-ui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8000"
+    links:
+      - daw-docker-registry
+    depends_on:
+      - daw-docker-registry
+    volumes:
+      - ./config.yml:/opt/config.yml:ro
+
+    networks:
+      - wan-daw-docker-registry-network
+
+volumes:
+  daw-docker-registry-db-data:
+  daw-docker-registry-data:
+
+networks:
+  lan-daw-docker-registry-network:
+    internal: true
+  wan-daw-docker-registry-network:
+    driver: bridge

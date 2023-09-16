@@ -2,3 +2,5 @@ data/registry_events.db
 config-dev.yml
 dev.Makefile
 keep_tags.json
+/data/
+/auth/*
