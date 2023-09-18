@@ -8,16 +8,19 @@ services:
     restart: always
     environment:
       REGISTRY_STORAGE_DELETE_ENABLED: "true"
-      REGISTRY_AUTH: htpasswd
-      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
-      REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
+      # REGISTRY_AUTH: htpasswd
+      # REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      # REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
       REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
       TZ : Europe/Madrid
+      REGISTRY_HTTP_ADDR: 0.0.0.0:5000
+
     ports:
       - "5000:5000"
+      - "443:443"
     volumes:
       - daw-docker-registry-data:/var/lib/registry
-      - ./auth:/auth
+      # - ./auth:/auth
       - ./data:/data
       - ./configRegistry.yml:/etc/docker/registry/config.yml
     networks:
@@ -38,10 +41,9 @@ services:
     volumes:
       - ./config.yml:/opt/config.yml:ro
       - ./registry_events.db:/data/registry_events.db
+      - /media/DIURNO/registry/:/var/lib/registry
     environment:
       TZ : Europe/Madrid
-
-
     networks:
       - wan-daw-docker-registry-network
 
